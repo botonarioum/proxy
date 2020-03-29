@@ -82,7 +82,7 @@ class BotController extends AbstractController
     {
         return $this->json(array_map(function (Bot $bot) {
             return $bot->toArray();
-        }, $repository->findAll()));
+        }, $repository->findBy([], ['id' => 'DESC'])));
     }
 
     /**

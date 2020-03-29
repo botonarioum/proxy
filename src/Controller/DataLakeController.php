@@ -23,6 +23,6 @@ class DataLakeController extends AbstractController
     {
         return $this->json(array_map(function (DataLake $dataLake) {
             return $dataLake->toArray();
-        }, $repository->findBy(['bot_id' => $bot->getId()])));
+        }, $repository->findBy(['bot_id' => $bot->getId()], ['id' => 'DESC'])));
     }
 }
