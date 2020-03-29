@@ -12,6 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DataLakeController extends AbstractController
 {
+    private const
+        LIMIT = 1000,
+        OFFSET = 0;
+
     /**
      * @Route("/datalake/{bot_id}", name="data_lake", methods={"GET"})
      * @ParamConverter("bot", options={"id" = "bot_id"})
@@ -23,6 +27,6 @@ class DataLakeController extends AbstractController
     {
         return $this->json(array_map(function (DataLake $dataLake) {
             return $dataLake->toArray();
-        }, $repository->findBy(['bot_id' => $bot->getId()], ['id' => 'DESC'])));
+        }, $repository->findBy(['bot_id' => $bot->getId()], ['id' => 'DESC'], self::LIMIT, self::OFFSET)));
     }
 }
