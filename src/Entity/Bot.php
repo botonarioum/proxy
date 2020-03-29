@@ -27,7 +27,7 @@ class Bot
     private $telegram_user_id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", unique=true)
      */
     private $telegram_bot_id;
 
@@ -40,6 +40,16 @@ class Bot
      * @ORM\Column(type="text")
      */
     private $comment;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $telegram_origin_webhook_url;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $telegram_proxy_webhook_url;
 
     /**
      * @ORM\Column(type="datetime")
@@ -138,5 +148,40 @@ class Bot
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    public function getTelegramOriginWebhookUrl(): ?string
+    {
+        return $this->telegram_origin_webhook_url;
+    }
+
+    public function setTelegramOriginWebhookUrl(string $telegram_origin_webhook_url): self
+    {
+        $this->telegram_origin_webhook_url = $telegram_origin_webhook_url;
+
+        return $this;
+    }
+
+    public function getTelegramProxyWebhookUrl(): ?string
+    {
+        return $this->telegram_proxy_webhook_url;
+    }
+
+    public function setTelegramProxyWebhookUrl(string $telegram_proxy_webhook_url): self
+    {
+        $this->telegram_proxy_webhook_url = $telegram_proxy_webhook_url;
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id'         => $this->getId(),
+            'token'      => hash('md5', $this->getToken()),
+            'is_enable'  => $this->getIsEnable(),
+            'created_at' => $this->getCreatedAt()->format('d-m-Y H:m:s'),
+            'updated_at' => $this->getUpdatedAt()->format('d-m-Y H:m:s')
+        ];
     }
 }

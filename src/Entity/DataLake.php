@@ -71,4 +71,12 @@ class DataLake
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'data'       => $this->getData(),
+            'created_at' => $this->getCreatedAt()->format('Y-m-d H:m:s')
+        ];
+    }
 }

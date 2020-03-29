@@ -1,0 +1,24 @@
+version: '3'
+services: 
+    web:
+        container_name: botoproxy_php
+        build: ./etc/infrastructure/Dockerfiles/php
+        volumes: 
+            - .:/var/www/botoproxy
+        tty: true
+    redis:
+        container_name: botoproxy_redis
+        image: redis
+        restart: always
+    db:
+        container_name: botoproxy_postgres
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: example
+    adminer:
+        container_name: botoproxy_adminer
+        image: adminer
+        restart: always
+        ports:
+            - 8081:8081

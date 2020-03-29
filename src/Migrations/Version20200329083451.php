@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200328094612 extends AbstractMigration
+final class Version20200329083451 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -24,7 +24,8 @@ final class Version20200328094612 extends AbstractMigration
 
         $this->addSql('CREATE SEQUENCE bot_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE data_lake_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE bot (id INT NOT NULL, token VARCHAR(255) NOT NULL, telegram_user_id INT NOT NULL, telegram_bot_id INT NOT NULL, is_enable BOOLEAN NOT NULL, comment TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE bot (id INT NOT NULL, token VARCHAR(255) NOT NULL, telegram_user_id INT NOT NULL, telegram_bot_id INT NOT NULL, is_enable BOOLEAN NOT NULL, comment TEXT NOT NULL, telegram_origin_webhook_url VARCHAR(255) NOT NULL, telegram_proxy_webhook_url VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_11F0411A0E2F38 ON bot (telegram_bot_id)');
         $this->addSql('CREATE TABLE data_lake (id INT NOT NULL, bot_id INT NOT NULL, data TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN data_lake.data IS \'(DC2Type:json)\'');
     }
