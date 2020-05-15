@@ -34,19 +34,21 @@ class ProxyController extends AbstractController
 
         if (!$bot instanceof Bot) return $this->json(['status' => 'fail'], Response::HTTP_NOT_FOUND);
 
-        $response = $client = (new Client())->post(
+        $response = (new Client())->post(
             $bot->getTelegramOriginWebhookUrl(),
             ['json' => json_decode($request->getContent(), true), 'http_errors' => false]);
 
         if ($response->getStatusCode() !== Response::HTTP_OK) return $this->json(['status' => 'fail'], $response->getStatusCode());
 
-        $data = (new DataLake())
-            ->setBotId($bot->getId())
-            ->setData(json_decode($request->getContent(), true))
-            ->setCreatedAt(new DateTime());
-
-        $em->persist($data);
-        $em->flush();
+        try {
+            $em->persist((new DataLake())
+                ->setBotId($bot->getId())
+                ->setData(json_decode($request->getContent(), true))
+                ->setCreatedAt(new DateTime()));
+            $em->flush();
+        } catch (\Throwable $exception) {
+            //
+        }
 
         return $this->json(['status' => 'ok']);
     }

@@ -1,24 +1,66 @@
 version: '3'
-services: 
-    web:
-        container_name: botoproxy_php
-        build: ./etc/infrastructure/Dockerfiles/php
-        volumes: 
-            - .:/var/www/botoproxy
+services:
+    webserver:
+        container_name: adv_webserver
+        image: nginx:alpine
+        restart: on-failure
         tty: true
-    redis:
-        container_name: botoproxy_redis
-        image: redis
-        restart: always
+        ports:
+            - "8082:80"
+            - "443:443"
+        depends_on:
+            - app
+        volumes:
+            - ./:/var/www
+            - ./etc/infrastructure/Dockerfiles/nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - app-proxy-network
+    app:
+        container_name: adv_app
+        build: ./etc/infrastructure/Dockerfiles/php
+        volumes:
+            - .:/var/www
+        restart: on-failure
+        tty: true
+        ports:
+            - "8585:8585"
+        expose:
+            - "9000"
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        depends_on:
+            - db
+        networks:
+            - app-proxy-network
     db:
-        container_name: botoproxy_postgres
+        container_name: adv_postgres
         image: postgres
         restart: always
         environment:
             POSTGRES_PASSWORD: example
+        networks:
+            - app-proxy-network
     adminer:
-        container_name: botoproxy_adminer
+        container_name: adv_adminer
         image: adminer
         restart: always
         ports:
-            - 8081:8081
+            - "8080:8080"
+        depends_on:
+            - db
+        networks:
+            - app-proxy-network
+    composer:
+        container_name: adv_composer
+        build: ./etc/infrastructure/Dockerfiles/composer
+        volumes:
+            - .:/app
+        tty: true
+        restart: on-failure
+        command: ["composer", "install"]
+        networks:
+            - app-proxy-network
+networks:
+    app-proxy-network:
+        driver: bridge

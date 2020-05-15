@@ -31,6 +31,11 @@ class DataLake
      */
     private $created_at;
 
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $hash;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,6 +61,8 @@ class DataLake
     public function setData(array $data): self
     {
         $this->data = $data;
+
+        $this->hash = hash('sha256', json_encode($data));
 
         return $this;
     }
