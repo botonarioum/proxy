@@ -2,9 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource(attributes={"pagination_enabled"=true})
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass="App\Repository\BotRepository")
  */
 class Bot
@@ -22,7 +29,7 @@ class Bot
     private $token;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      */
     private $telegram_user_id;
 
@@ -60,6 +67,22 @@ class Bot
      * @ORM\Column(type="datetime")
      */
     private $updated_at;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class)
+     */
+    private $users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Group::class)
+     */
+    private $groups;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -174,14 +197,55 @@ class Bot
         return $this;
     }
 
-    public function toArray(): array
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
     {
-        return [
-            'id'         => $this->getId(),
-            'token'      => hash('md5', $this->getToken()),
-            'is_enable'  => $this->getIsEnable(),
-            'created_at' => $this->getCreatedAt()->format('d-m-Y H:m:s'),
-            'updated_at' => $this->getUpdatedAt()->format('d-m-Y H:m:s')
-        ];
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Group[]
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): self
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups[] = $group;
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): self
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
+        }
+
+        return $this;
     }
 }

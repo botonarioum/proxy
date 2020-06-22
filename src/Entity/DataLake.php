@@ -17,9 +17,10 @@ class DataLake
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity=Bot::class)
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $bot_id;
+    private $bot;
 
     /**
      * @ORM\Column(type="json")
@@ -39,18 +40,6 @@ class DataLake
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getBotId(): ?int
-    {
-        return $this->bot_id;
-    }
-
-    public function setBotId(int $bot_id): self
-    {
-        $this->bot_id = $bot_id;
-
-        return $this;
     }
 
     public function getData(): ?array
@@ -79,11 +68,15 @@ class DataLake
         return $this;
     }
 
-    public function toArray(): array
+    public function getBot(): ?Bot
     {
-        return [
-            'data'       => $this->getData(),
-            'created_at' => $this->getCreatedAt()->format('Y-m-d H:m:s')
-        ];
+        return $this->bot;
+    }
+
+    public function setBot(?Bot $bot): self
+    {
+        $this->bot = $bot;
+
+        return $this;
     }
 }

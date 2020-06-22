@@ -11,6 +11,7 @@
         "php": "7.4.*",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "api-platform/api-pack": "^1.2",
         "doctrine/annotations": "^1.8",
         "formapro/telegram-bot": "^0.2.0",
         "sensio/framework-extra-bundle": "^5.5",
