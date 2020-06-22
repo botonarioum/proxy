@@ -42,7 +42,7 @@ class ProxyController extends AbstractController
 
         try {
             $em->persist((new DataLake())
-                ->setBotId($bot->getId())
+                ->setBot($bot)
                 ->setData(json_decode($request->getContent(), true))
                 ->setCreatedAt(new DateTime()));
             $em->flush();
