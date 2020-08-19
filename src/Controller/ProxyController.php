@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Bot;
+use App\Handlers\BannerActionMessage;
 use App\Messages\RedirectThisMessage;
 use App\Repository\BotRepository;
 use GuzzleHttp\Client;
@@ -12,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
@@ -48,12 +50,14 @@ class ProxyController extends AbstractController
         }
 
         try {
-            $bus->dispatch(
+            $message = (new Envelope(
                 new RedirectThisMessage(
                     $bot->getTelegramOriginWebhookUrl(),
                     json_decode($request->getContent(), true)
                 )
-            );
+            ));
+
+            $bus->dispatch($message);
         } catch (Throwable $exception) {
             var_dump($exception->getMessage() . PHP_EOL);
         }
