@@ -188,6 +188,9 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "symfony/amqp-pack": {
+        "version": "v1.0.12"
+    },
     "symfony/apache-pack": {
         "version": "1.0",
         "recipe": {
@@ -378,6 +381,9 @@
     },
     "symfony/serializer": {
         "version": "v5.0.10"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.3"
     },
     "symfony/service-contracts": {
         "version": "v2.0.1"
