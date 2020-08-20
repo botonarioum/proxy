@@ -50,14 +50,14 @@ class ProxyController extends AbstractController
         }
 
         try {
-            $message = (new Envelope(
-                new RedirectThisMessage(
-                    $bot->getTelegramOriginWebhookUrl(),
-                    json_decode($request->getContent(), true)
+            $bus->dispatch(
+                new Envelope(
+                    new RedirectThisMessage(
+                        $bot->getTelegramOriginWebhookUrl(),
+                        json_decode($request->getContent(), true)
+                    )
                 )
-            ));
-
-            $bus->dispatch($message);
+            );
         } catch (Throwable $exception) {
             var_dump($exception->getMessage() . PHP_EOL);
         }
