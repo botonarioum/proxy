@@ -12,7 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
@@ -33,6 +32,7 @@ class ProxyController extends AbstractController
         BotRepository $repository,
         MessageBusInterface $bus
     ): JsonResponse {
+        var_dump('PROXY...' . PHP_EOL);
         $bot = $repository->findOneBy(['token' => $token]);
 
         if (!$bot instanceof Bot) {
@@ -49,12 +49,12 @@ class ProxyController extends AbstractController
         }
 
         try {
+            var_dump('RABBITMQ...' . PHP_EOL);
+
             $bus->dispatch(
-                new Envelope(
-                    new RedirectThisMessage(
-                        $bot->getTelegramOriginWebhookUrl(),
-                        json_decode($request->getContent(), true)
-                    )
+                new RedirectThisMessage(
+                    $bot->getTelegramOriginWebhookUrl(),
+                    json_decode($request->getContent(), true)
                 )
             );
         } catch (Throwable $exception) {

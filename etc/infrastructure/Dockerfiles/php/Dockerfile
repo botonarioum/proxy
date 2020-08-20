@@ -21,9 +21,12 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     git \
+    librabbitmq-dev \
     libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo pdo_pgsql pgsql
+RUN pecl install amqp \
+   && docker-php-ext-enable amqp
 COPY php.ini "$PHP_INI_DIR/php.ini"
 WORKDIR /var/www
