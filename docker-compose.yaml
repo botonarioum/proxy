@@ -61,6 +61,20 @@ services:
         command: ["composer", "install"]
         networks:
             - app-proxy-network
+    rabbit:
+        container_name: adv_rabbitmq
+        image: rabbitmq:3-management
+        restart: always
+        depends_on:
+            - app
+        environment:
+            RABBITMQ_DEFAULT_USER: user
+            RABBITMQ_DEFAULT_PASS: password
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        networks:
+            - app-proxy-network
 networks:
     app-proxy-network:
         driver: bridge
