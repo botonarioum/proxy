@@ -34,6 +34,7 @@ class ProxyController extends AbstractController
         BotRepository $repository,
         MessageBusInterface $bus
     ): JsonResponse {
+        var_dump('PROXY...' . PHP_EOL);
         $bot = $repository->findOneBy(['token' => $token]);
 
         if (!$bot instanceof Bot) {
@@ -50,6 +51,7 @@ class ProxyController extends AbstractController
         }
 
         try {
+            var_dump('RABBITMQ...' . PHP_EOL);
             $message = (new Envelope(
                 new RedirectThisMessage(
                     $bot->getTelegramOriginWebhookUrl(),
