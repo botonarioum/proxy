@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Bot;
-use App\Handlers\BannerActionMessage;
 use App\Messages\RedirectThisMessage;
 use App\Repository\BotRepository;
 use GuzzleHttp\Client;
