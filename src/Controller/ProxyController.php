@@ -37,24 +37,11 @@ class ProxyController extends AbstractController
     ): JsonResponse {
         $logger->error('INIT' . PHP_EOL);
 
-        var_dump('PROXY...' . PHP_EOL);
-        $bot = $repository->findOneBy(['token' => $token]);
-
-        if (!$bot instanceof Bot) {
-            return $this->json(['status' => 'fail'], Response::HTTP_NOT_FOUND);
-        }
-
-        $response = (new Client())->post(
-            $bot->getTelegramOriginWebhookUrl(),
-            ['json' => json_decode($request->getContent(), true), 'http_errors' => false]
-        );
-
-//        if ($response->getStatusCode() !== Response::HTTP_OK) {
-//            return $this->json(['status' => 'fail'], $response->getStatusCode());
-//        }
-
         try {
             var_dump('RABBITMQ...' . PHP_EOL);
+
+            var_dump('PROXY...' . PHP_EOL);
+            $bot = $repository->findOneBy(['token' => $token]);
 
             $bus->dispatch(
                 new RedirectThisMessage(
@@ -64,6 +51,19 @@ class ProxyController extends AbstractController
             );
         } catch (Throwable $exception) {
             var_dump($exception->getMessage() . PHP_EOL);
+        }
+        
+        if (!$bot instanceof Bot) {
+            return $this->json(['status' => 'fail'], Response::HTTP_NOT_FOUND);
+        }
+
+        $response = (new Client())->post(
+            $bot->getTelegramOriginWebhookUrl(),
+            ['json' => json_decode($request->getContent(), true), 'http_errors' => false]
+        );
+
+        if ($response->getStatusCode() !== Response::HTTP_OK) {
+            return $this->json(['status' => 'fail'], $response->getStatusCode());
         }
 
         return $this->json(['status' => 'ok']);
