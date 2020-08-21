@@ -28,19 +28,14 @@ class ProxyController extends AbstractController
      * @param LoggerInterface $logger
      * @return JsonResponse
      */
-    public function index(
+    public function proxy(
         Request $request,
         string $token,
         BotRepository $repository,
         MessageBusInterface $bus,
         LoggerInterface $logger
     ): JsonResponse {
-        $logger->error('INIT' . PHP_EOL);
-
         try {
-            var_dump('RABBITMQ...' . PHP_EOL);
-
-            var_dump('PROXY...' . PHP_EOL);
             $bot = $repository->findOneBy(['token' => $token]);
 
             $bus->dispatch(

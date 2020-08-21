@@ -15,9 +15,11 @@ class HealthCheckController extends AbstractController
      */
     public function index()
     {
-        return $this->json([
-            'status' => 'ok',
-            'now'    => (new DateTime())->format('Y-m-d H:m:s'),
-        ]);
+        return $this->json(
+            [
+                'status' => 'ok',
+                'now'    => (new DateTime())->format('Y-m-d H:m:s'),
+            ]
+        );
     }
 }

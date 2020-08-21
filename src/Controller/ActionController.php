@@ -10,13 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/bots/action", name="bot_action")
- */
 class ActionController extends AbstractController
 {
     /**
-     * @Route("/enable/{bot_id}", name="enable_bot", methods={"PATCH"})
+     * @Route("/api/bot/connect/{bot_id}", name="enable_bot", methods={"POST"})
      * @ParamConverter("bot", options={"id" = "bot_id"})
      * @param Bot $bot
      * @param Enable $cmd
@@ -30,7 +27,7 @@ class ActionController extends AbstractController
     }
 
     /**
-     * @Route("/disable/{bot_id}", name="disable_bot", methods={"PATCH"})
+     * @Route("/api/bot/connect/{bot_id}", name="disable_bot", methods={"DELETE"})
      * @ParamConverter("bot", options={"id" = "bot_id"})
      * @param Bot $bot
      * @param Disable $cmd
