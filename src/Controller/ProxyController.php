@@ -45,6 +45,7 @@ class ProxyController extends AbstractController
 
             $bus->dispatch(
                 new RedirectThisMessage(
+                    $bot->getToken(),
                     $bot->getTelegramOriginWebhookUrl(),
                     json_decode($request->getContent(), true)
                 )
@@ -52,7 +53,7 @@ class ProxyController extends AbstractController
         } catch (Throwable $exception) {
             var_dump($exception->getMessage() . PHP_EOL);
         }
-        
+
         if (!$bot instanceof Bot) {
             return $this->json(['status' => 'fail'], Response::HTTP_NOT_FOUND);
         }
