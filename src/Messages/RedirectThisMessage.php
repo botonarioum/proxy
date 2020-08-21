@@ -9,7 +9,7 @@ class RedirectThisMessage
 {
     public string $redirectHere;
     public array $postData;
-    private string $token;
+    public string $token;
 
     public function __construct(string $redirectHere, array $postData, string $token)
     {
