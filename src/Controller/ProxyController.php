@@ -49,9 +49,9 @@ class ProxyController extends AbstractController
             ['json' => json_decode($request->getContent(), true), 'http_errors' => false]
         );
 
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            return $this->json(['status' => 'fail'], $response->getStatusCode());
-        }
+//        if ($response->getStatusCode() !== Response::HTTP_OK) {
+//            return $this->json(['status' => 'fail'], $response->getStatusCode());
+//        }
 
         try {
             var_dump('RABBITMQ...' . PHP_EOL);
