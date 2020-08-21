@@ -8,6 +8,7 @@ use App\Entity\Bot;
 use App\Messages\RedirectThisMessage;
 use App\Repository\BotRepository;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,14 +25,18 @@ class ProxyController extends AbstractController
      * @param string $token
      * @param BotRepository $repository
      * @param MessageBusInterface $bus
+     * @param LoggerInterface $logger
      * @return JsonResponse
      */
     public function index(
         Request $request,
         string $token,
         BotRepository $repository,
-        MessageBusInterface $bus
+        MessageBusInterface $bus,
+        LoggerInterface $logger
     ): JsonResponse {
+        $logger->error('INIT' . PHP_EOL);
+
         var_dump('PROXY...' . PHP_EOL);
         $bot = $repository->findOneBy(['token' => $token]);
 
