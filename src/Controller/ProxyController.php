@@ -46,8 +46,8 @@ class ProxyController extends AbstractController
             $bus->dispatch(
                 new RedirectThisMessage(
                     $bot->getToken(),
-                    $bot->getTelegramOriginWebhookUrl(),
-                    json_decode($request->getContent(), true)
+                    json_decode($request->getContent(), true),
+                    $bot->getTelegramOriginWebhookUrl()
                 )
             );
         } catch (Throwable $exception) {
