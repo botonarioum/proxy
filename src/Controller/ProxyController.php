@@ -39,6 +39,7 @@ class ProxyController extends AbstractController
 
         $bus->dispatch(
             new RedirectThisMessage(
+                $uuid,
                 $originWebhookUrl->getOriginalWebhookUrl(),
                 json_decode($request->getContent(), true),
             )
