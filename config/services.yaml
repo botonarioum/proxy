@@ -25,3 +25,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Services\ProxyUrlsContainer:
+        calls:
+            -   method: add
+                arguments:
+                    - '%env(string:PROXY_HOST_1)%'
+                    - '%env(string:PROXY_HOST_2)%'
