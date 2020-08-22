@@ -11,9 +11,8 @@ class RedirectThisMessage
     public array $postData;
     public string $token;
 
-    public function __construct(string $redirectHere, array $postData, string $token)
+    public function __construct(string $redirectHere, array $postData)
     {
-        $this->token = $token;
         $this->redirectHere = $redirectHere;
         $this->postData = $postData;
     }

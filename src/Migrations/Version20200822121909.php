@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200821184456 extends AbstractMigration
+final class Version20200822121909 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20200821184456 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('CREATE TABLE telegram_bot (uuid VARCHAR(255) NOT NULL, original_webhook_url VARCHAR(255) NOT NULL, proxy_webhook_url VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(uuid))');
+        $this->addSql('CREATE TABLE webhook_url_pairs (uuid VARCHAR(255) NOT NULL, original_webhook_url VARCHAR(255) NOT NULL, proxy_webhook_url VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(uuid))');
     }
 
     public function down(Schema $schema) : void
@@ -31,6 +31,6 @@ final class Version20200821184456 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('DROP TABLE telegram_bot');
+        $this->addSql('DROP TABLE webhook_url_pairs');
     }
 }

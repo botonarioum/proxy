@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TelegramBotRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\WebhookUrlPairsRepository")
  */
-class TelegramBot
+class WebhookUrlPairs
 {
     /**
      * @ORM\Id()
@@ -33,27 +34,33 @@ class TelegramBot
      */
     private DateTimeInterface $created_at;
 
-    public function __construct(string $proxyWebhookUrl, string $originWebhookUrl)
+    public function __construct(string $uuid, string $proxyWebhookUrl, string $originWebhookUrl)
     {
         $this->proxy_webhook_url = $proxyWebhookUrl;
         $this->original_webhook_url = $originWebhookUrl;
+        $this->uuid = $uuid;
 
-        $this->uuid = Uuid::uuid4()->toString();
         $this->created_at = new DateTimeImmutable();
     }
 
-    public function getUuid(): ?string
-    {
-        return $this->uuid;
-    }
-
-    public function getOriginalWebhookUrl(): ?string
+    /**
+     * @return string
+     */
+    public function getOriginalWebhookUrl(): string
     {
         return $this->original_webhook_url;
     }
 
-    public function getProxyWebhookUrl(): ?string
+    /**
+     * @return string
+     */
+    public function getProxyWebhookUrl(): string
     {
         return $this->proxy_webhook_url;
+    }
+
+    public function enabled(string $webhookUrl): bool
+    {
+        return $webhookUrl === $this->getProxyWebhookUrl();
     }
 }
