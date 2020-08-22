@@ -28,7 +28,7 @@ class ConnectionController extends AbstractController
 
         $cmd(
             new Bot($content['token']),
-            $repository->findOneBy(['uuid' => $content['token']])
+            $repository->findOneBy(['uuid' => $content['uuid']])
         );
 
         return $this->json(
@@ -54,7 +54,7 @@ class ConnectionController extends AbstractController
 
         $cmd(
             new Bot($content['token']),
-            $repository->findOneBy(['uuid' => $content['token']])
+            $repository->findOneBy(['uuid' => $content['uuid']])
         );
 
         return $this->json(
@@ -79,9 +79,14 @@ class ConnectionController extends AbstractController
 
         $webhookPairs = $repository->findOneBy(['uuid' => $content['uuid']]);
 
+        $currentWebhookUrl = json_decode(
+            (new Bot($content['token']))->getWebhookInfo()->getBody()->getContents(),
+            true
+        )['result']['url'];
+
         return $this->json(
             [
-                'is_connected' => $webhookPairs->enabled($content['webhook_url'])
+                'is_connected' => $webhookPairs->enabled($currentWebhookUrl)
             ]
         );
     }

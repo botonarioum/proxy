@@ -31,7 +31,7 @@ class WebhookPairsController extends AbstractController
 //        example request data
 //        [
 //            'uuid'  => 'example-bot-uuid',
-//            'token' => 'example-bot-token'
+//            'origin_webhook_url' => 'http://example.com/update'
 //        ];
 
         $uuid = $content['uuid'];
