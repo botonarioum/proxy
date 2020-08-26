@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Entity\WebhookUrlPairs;
 use App\Messages\RedirectThisMessage;
 use App\Repository\WebhookUrlPairsRepository;
-use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,15 +43,6 @@ class ProxyController extends AbstractController
                 json_decode($request->getContent(), true),
             )
         );
-
-        $response = (new Client())->post(
-            $originWebhookUrl->getOriginalWebhookUrl(),
-            ['json' => json_decode($request->getContent(), true), 'http_errors' => false]
-        );
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            return $this->json(['status' => 'fail'], $response->getStatusCode());
-        }
 
         return $this->json([]);
     }

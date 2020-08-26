@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\WebhookUrlPairs;
+use App\Services\ProxyUrlsContainer;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Formapro\TelegramBot\Bot;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,11 +21,14 @@ class WebhookPairsController extends AbstractController
      * @Route("/api/bot", name="register_bot", methods={"POST"})
      * @param Request $request
      * @param EntityManagerInterface $em
+     * @param ProxyUrlsContainer $proxyUrlsContainer
      * @return JsonResponse
-     * @throws Exception
      */
-    public function register(Request $request, EntityManagerInterface $em): JsonResponse
-    {
+    public function register(
+        Request $request,
+        EntityManagerInterface $em,
+        ProxyUrlsContainer $proxyUrlsContainer
+    ): JsonResponse {
         $content = json_decode($request->getContent(), true);
 
 //        example request data
@@ -48,7 +51,7 @@ class WebhookPairsController extends AbstractController
             $em->persist(
                 new WebhookUrlPairs(
                     $uuid,
-                    'https://boto-proxy-1.herokuapp.com/proxy/' . $uuid,
+                    $proxyUrlsContainer->get() . '/' . $uuid,
                     json_decode((new Bot($token))->getWebhookInfo()->getBody()->getContents(), true)['result']['url']
                 )
             );

@@ -1,14 +1,23 @@
 framework:
     messenger:
         transports:
-            async:
+            events:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     exchange:
-                        name: requests
+                        name: messages
                     queues:
-                        redirect: ~
-                        scan_chat: ~
-                        scan_user: ~
+                        master_events: ~
+                        slave_events: ~
+            master:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    queues:
+                        master_events: ~
+            slave:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    queues:
+                        slave_events: ~
         routing:
-            'App\Messages\RedirectThisMessage': async
+            'App\Messages\RedirectThisMessage': events

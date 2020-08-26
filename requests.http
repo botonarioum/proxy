@@ -2,7 +2,7 @@
 GET http://{{host}}/api/health/check
 
 ### Register
-POST http://{{host}}//api/bot
+POST http://{{host}}/api/bot
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ### Enable
-POST http://{{host}}//api/bot/connect
+POST http://{{host}}/api/bot/connect
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### Disable
-DELETE http://{{host}}//api/bot/connect
+DELETE http://{{host}}/api/bot/connect
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### Check
-POST http://{{host}}//api/bot/connect/check
+POST http://{{host}}/api/bot/connect/check
 Content-Type: application/json
 
 {
