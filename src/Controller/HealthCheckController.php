@@ -11,13 +11,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class HealthCheckController extends AbstractController
 {
     /**
-     * @Route("/health/check", name="health_check")
+     * @Route("/api/health/check", name="health_check")
      */
     public function index()
     {
-        return $this->json([
-            'status' => 'ok',
-            'now'    => (new DateTime())->format('Y-m-d H:m:s'),
-        ]);
+        return $this->json(
+            [
+                'status' => 'ok',
+                'now'    => (new DateTime())->format('Y-m-d H:m:s'),
+            ]
+        );
     }
 }

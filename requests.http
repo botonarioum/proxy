@@ -1,0 +1,43 @@
+### Handshake
+GET http://{{host}}/api/health/check
+
+### Register
+POST http://{{host}}/api/bot
+Content-Type: application/json
+
+{
+  "uuid": "{{uuid}}",
+  "token": "{{token}}"
+}
+
+### Enable
+POST http://{{host}}/api/bot/connect
+Content-Type: application/json
+
+{
+  "uuid": "{{uuid}}",
+  "token": "{{token}}"
+}
+
+### Disable
+DELETE http://{{host}}/api/bot/connect
+Content-Type: application/json
+
+{
+  "uuid": "{{uuid}}",
+  "token": "{{token}}"
+}
+
+### Check
+POST http://{{host}}/api/bot/connect/check
+Content-Type: application/json
+
+{
+  "uuid": "{{uuid}}",
+  "token": "{{token}}"
+}
+
+### Get bot webhook info
+GET https://api.telegram.org/bot{{token}}/getWebhookInfo
+
+###

@@ -4,69 +4,46 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Bot;
+use App\Entity\WebhookUrlPairs;
 use App\Messages\RedirectThisMessage;
-use App\Repository\BotRepository;
-use GuzzleHttp\Client;
-use Psr\Log\LoggerInterface;
+use App\Repository\WebhookUrlPairsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 class ProxyController extends AbstractController
 {
     /**
-     * @Route("/proxy/{token}", name="proxy", methods={"POST"})
+     * @Route("/api/proxy/{uuid}", name="proxy", methods={"POST"})
      * @param Request $request
-     * @param string $token
-     * @param BotRepository $repository
+     * @param string $uuid
+     * @param WebhookUrlPairsRepository $repository
      * @param MessageBusInterface $bus
-     * @param LoggerInterface $logger
      * @return JsonResponse
      */
-    public function index(
+    public function proxy(
         Request $request,
-        string $token,
-        BotRepository $repository,
-        MessageBusInterface $bus,
-        LoggerInterface $logger
+        string $uuid,
+        WebhookUrlPairsRepository $repository,
+        MessageBusInterface $bus
     ): JsonResponse {
-        $logger->error('INIT' . PHP_EOL);
+        $originWebhookUrl = $repository->findOneBy(['uuid' => $uuid]);
 
-        try {
-            var_dump('RABBITMQ...' . PHP_EOL);
-
-            var_dump('PROXY...' . PHP_EOL);
-            $bot = $repository->findOneBy(['token' => $token]);
-
-            $bus->dispatch(
-                new RedirectThisMessage(
-                    $bot->getToken(),
-                    json_decode($request->getContent(), true),
-                    $bot->getTelegramOriginWebhookUrl()
-                )
-            );
-        } catch (Throwable $exception) {
-            var_dump($exception->getMessage() . PHP_EOL);
-        }
-
-        if (!$bot instanceof Bot) {
+        if (!$originWebhookUrl instanceof WebhookUrlPairs) {
             return $this->json(['status' => 'fail'], Response::HTTP_NOT_FOUND);
         }
 
-        $response = (new Client())->post(
-            $bot->getTelegramOriginWebhookUrl(),
-            ['json' => json_decode($request->getContent(), true), 'http_errors' => false]
+        $bus->dispatch(
+            new RedirectThisMessage(
+                $uuid,
+                $originWebhookUrl->getOriginalWebhookUrl(),
+                json_decode($request->getContent(), true),
+            )
         );
 
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            return $this->json(['status' => 'fail'], $response->getStatusCode());
-        }
-
-        return $this->json(['status' => 'ok']);
+        return $this->json([]);
     }
 }

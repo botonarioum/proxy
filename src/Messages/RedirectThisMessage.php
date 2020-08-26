@@ -7,14 +7,14 @@ namespace App\Messages;
 
 class RedirectThisMessage
 {
+    public string $uuid;
     public string $redirectHere;
     public array $postData;
-    public string $token;
 
-    public function __construct(string $redirectHere, array $postData, string $token)
+    public function __construct(string $uuid, string $redirectHere, array $postData)
     {
-        $this->token = $token;
         $this->redirectHere = $redirectHere;
         $this->postData = $postData;
+        $this->uuid = $uuid;
     }
 }

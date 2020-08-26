@@ -16,3 +16,5 @@
 .DS_Store
 src/DS_Store
 composer.phar
+
+http-client.env.json
