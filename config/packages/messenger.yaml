@@ -1,10 +1,6 @@
 framework:
     messenger:
         transports:
-            messages:
-                options:
-                    exchange:
-                        name: proxy
             proxy:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
