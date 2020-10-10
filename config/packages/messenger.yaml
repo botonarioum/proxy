@@ -1,23 +1,23 @@
 framework:
     messenger:
         transports:
-            events:
+            proxy:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     exchange:
-                        name: messages
+                        name: proxy
                     queues:
-                        master_events: ~
-                        slave_events: ~
+                        master: ~
+                        slave: ~
             master:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     queues:
-                        master_events: ~
+                        master: ~
             slave:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     queues:
-                        slave_events: ~
+                        slave: ~
         routing:
-            'App\Messages\RedirectThisMessage': events
+            'App\Messages\RedirectThisMessage': proxy
