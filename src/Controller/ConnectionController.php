@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Botonarioum\Domain\Commands\Disable;
 use App\Botonarioum\Domain\Commands\Enable;
+use App\Entity\WebhookUrlPairs;
 use App\Repository\WebhookUrlPairsRepository;
 use Formapro\TelegramBot\Bot;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -79,14 +80,22 @@ class ConnectionController extends AbstractController
 
         $webhookPairs = $repository->findOneBy(['uuid' => $content['uuid']]);
 
-        $currentWebhookUrl = json_decode(
-            (new Bot($content['token']))->getWebhookInfo()->getBody()->getContents(),
-            true
-        )['result']['url'];
+        if ($webhookPairs instanceof WebhookUrlPairs) {
+            $currentWebhookUrl = json_decode(
+                (new Bot($content['token']))->getWebhookInfo()->getBody()->getContents(),
+                true
+            )['result']['url'];
+
+            return $this->json(
+                [
+                    'is_connected' => $webhookPairs->enabled($currentWebhookUrl)
+                ]
+            );
+        }
 
         return $this->json(
             [
-                'is_connected' => $webhookPairs->enabled($currentWebhookUrl)
+                'is_connected' => false
             ]
         );
     }
